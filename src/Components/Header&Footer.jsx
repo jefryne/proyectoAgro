@@ -28,8 +28,8 @@ export function Nav() {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarCollapse">
                     <div className="navbar-nav ms-auto p-4 p-lg-0">
-                        {link.map(x => (
-                            <Link className='nav-item nav-link' to={x.href}>{x.name}</Link>
+                        {link.map((x,index) => (
+                            <Link key={index} className='nav-item nav-link' to={x.href}>{x.name}</Link>
                         ))}
                     </div>
                     <div className="border-start ps-4 d-none d-lg-block">

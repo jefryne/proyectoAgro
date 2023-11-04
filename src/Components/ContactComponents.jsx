@@ -1,4 +1,50 @@
+import { getDetection } from "../Api/getData"
+import {  useState,useRef } from "react"
+
 export const ContactStart = () => {
+    const [img,setImg] = useState('');
+    const [detections, setDetections] = useState([]);
+    const inputFile = useRef();
+
+    const uploadImg = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                setImg(e.target.result);
+                const response = await getDetection(file);
+                console.log(response);
+                const arrayPrediction = response.predictions;
+                arrayPrediction.forEach(element => {
+                    if (element.probability > 0.90) {
+                        const newDetection = {
+                            color: "red",
+                            left: element.boundingBox.left,
+                            top: element.boundingBox.top,
+                            width: element.boundingBox.width,
+                            height: element.boundingBox.height,
+                            border: "2px solid red",
+                            nombre: element.tagName,
+                        };
+                
+                        // Usamos el segundo argumento de setDetections para obtener el valor actualizado
+                        setDetections(prevDetections => [...prevDetections, newDetection]);
+                
+                        // Imprime el arreglo de detecciones actualizado en la consola
+                        //console.log("Detecciones:", [...detections, newDetection]);
+                    }
+                });
+                
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    const clear = () => {
+        setImg('');
+        inputFile.current.value = "";
+        setDetections([]);
+    }
     return (
         <>
             <div className="container-xxl py-5">
@@ -13,33 +59,39 @@ export const ContactStart = () => {
                             <p className="mb-4">The contact form is currently inactive. Get a functional and working contact form with Ajax &amp; PHP in a few minutes. Just copy and paste the files, add a little code and you're done. <a href="https://htmlcodex.com/contact-form">Download Now</a>.</p>
                             <form>
                                 <div className="row g-3">
-                                    <div className="col-md-6">
+                                    <div className="col-md-12">
                                         <div className="form-floating">
-                                            <input type="text" className="form-control" id="name" placeholder="Your Name" />
-                                            <label htmlFor="name">Your Name</label>
+                                            <input type="file" ref={inputFile} className="form-control" accept="image/*" onChange={uploadImg} />
+                                            <label htmlFor="">IMAGEN A DETECTAR</label>
                                         </div>
                                     </div>
-                                    <div className="col-md-6">
-                                        <div className="form-floating">
-                                            <input type="email" className="form-control" id="email" placeholder="Your Email" />
-                                            <label htmlFor="email">Your Email</label>
+                                    
+                                    <div className="col-12">
+
+                                        <div className="position-relative mt-5">
+                                            <div id="image-container" className="form-floating">
+                                                {img && <img className="img-fluid" src={img} alt="" />}
+                                                 {detections.map((item, index) => (
+                                                    <ObjectDetec
+                                                    key={index}
+                                                    color={item.color}
+                                                    left={item.left}
+                                                    top={item.top}
+                                                    width={item.width}
+                                                    height={item.height}
+                                                    border={item.border}
+                                                    nombre={item.nombre}
+                                                    />
+                                                ))}
+                                                    
+                                            </div>
                                         </div>
+                                        
                                     </div>
                                     <div className="col-12">
-                                        <div className="form-floating">
-                                            <input type="text" className="form-control" id="subject" placeholder="Subject" />
-                                            <label htmlFor="subject">Subject</label>
-                                        </div>
+                                        <button className="btn btn-secondary rounded-pill py-3 px-5" type="button" onClick={clear}>Limpiar</button>
                                     </div>
-                                    <div className="col-12">
-                                        <div className="form-floating">
-                                            <textarea className="form-control" placeholder="Leave a message here" id="message" style={{ height: 250 }} defaultValue={""} />
-                                            <label htmlFor="message">Message</label>
-                                        </div>
-                                    </div>
-                                    <div className="col-12">
-                                        <button className="btn btn-secondary rounded-pill py-3 px-5" type="submit">Send Message</button>
-                                    </div>
+                                    
                                 </div>
                             </form>
                         </div>
@@ -48,6 +100,11 @@ export const ContactStart = () => {
                             <div className="d-flex border-bottom pb-3 mb-3">
                                 <div className="flex-shrink-0 btn-square bg-secondary rounded-circle">
                                     <i className="fa fa-map-marker-alt text-body" />
+                                </div>
+                                <div className="d-flex border-bottom pb-3 mb-3">
+                                    <div className="flex-shrink-0 btn-square bg-secondary rounded-circle">
+                                        <i className="fa fa-map-marker-alt text-body" />
+                                    </div>
                                 </div>
                                 <div className="ms-3">
                                     <h6>Our Office</h6>
@@ -82,19 +139,23 @@ export const ContactStart = () => {
     )
 }
 
+export function ObjectDetec(props) {
+  return (
+    <>
+        <div>
+            <div className="position-absolute" style={{color:props.color, left:`${(props.left) * 100}%`, top:`${(props.top) * 100}%`, width:`${(props.width) * 100}%`, height:`${(props.height) * 100}%`, border:props.border}}> <b>{props.nombre}</b></div>
+        </div>
+    </>
+  )
+}
+
+
 export const HeaderContact = () => {
     return (
         <>
             <div className="container-fluid page-header py-5 mb-5 wow fadeIn" data-wow-delay="0.1s">
                 <div className="container text-center py-5">
                     <h1 className="display-3 text-white mb-4 animated slideInDown">Contact</h1>
-                    {/* <nav aria-label="breadcrumb animated slideInDown">
-                        <ol className="breadcrumb justify-content-center mb-0">
-                            <li className="breadcrumb-item"><a href="#">Home</a></li>
-                            <li className="breadcrumb-item"><a href="#">Pages</a></li>
-                            <li className="breadcrumb-item active" aria-current="page">Contact</li>
-                        </ol>
-                    </nav> */}
                 </div>
             </div>
         </>
