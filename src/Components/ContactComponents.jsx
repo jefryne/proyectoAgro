@@ -7,7 +7,7 @@ export const ContactStart = () => {
                         <p className="section-title bg-white text-center text-primary px-3">Contact Us</p>
                         <h1 className="mb-5">If You Have Any Query, Please Contact Us</h1>
                     </div>
-                    <div className="row g-5">
+                    <div id="s_formulario" className="row g-5">
                         <div className="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
                             <h3 className="mb-4">Need a functional contact form?</h3>
                             <p className="mb-4">The contact form is currently inactive. Get a functional and working contact form with Ajax &amp; PHP in a few minutes. Just copy and paste the files, add a little code and you're done. <a href="https://htmlcodex.com/contact-form">Download Now</a>.</p>
@@ -43,7 +43,7 @@ export const ContactStart = () => {
                                 </div>
                             </form>
                         </div>
-                        <div className="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
+                        <div  className="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
                             <h3 className="mb-4">Contact Details</h3>
                             <div className="d-flex border-bottom pb-3 mb-3">
                                 <div className="flex-shrink-0 btn-square bg-secondary rounded-circle">

@@ -3,7 +3,7 @@ import { useState } from "react";
 export function About() {
     return (
         <>
-            <div className="container-xxl py-5">
+            <div id="s_experiencia" className="container-xxl py-5">
                 <div className="container">
                     <div className="row g-5 align-items-end">
                         <div className="col-lg-6">
@@ -53,7 +53,7 @@ export function About() {
 export function Carousel() {
     return (
         <>
-            <div className="container-fluid px-0 mb-5">
+            <div id="s_reciclaje" className="container-fluid px-0 mb-5">
                 <div id="header-carousel" className="carousel slide" data-bs-ride="carousel">
                     <div className="carousel-inner">
                         <div className="carousel-item active">
@@ -106,7 +106,7 @@ export function Features() {
     }
     return (
         <>
-            <div className="container-xxl py-5">
+            <div id="s_estadisticas" className="container-xxl py-5">
                 <div className="container">
                     <div className="row g-5 align-items-center">
                         <div className="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
@@ -162,7 +162,7 @@ export function Features() {
 
 export function Service() {
     return (
-        <div className="container-xxl py-5">
+        <div id="s_analisis" className="container-xxl py-5">
             <div className="container">
                 <div className="text-center mx-auto pb-4 wow fadeInUp" data-wow-delay="0.1s" style={{ maxWidth: 500 }}>
                     <p className="section-title bg-white text-center text-primary px-3">Our Services</p>
