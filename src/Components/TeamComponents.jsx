@@ -7,7 +7,7 @@ export function TeamStart() {
                         <p className="section-title bg-white text-center text-primary px-3">Our Team</p>
                         <h1 className="mb-5">Experienced Team Members</h1>
                     </div>
-                    <div className="row g-4">
+                    <div id="s_integrates" className="row g-4">
                         <CardTeam name="Jeffry" img="img/team-1.jpg" skill="Full Stack" delay="0.1s"/>
                         <CardTeam name="Julian" img="img/team-2.jpg" skill="Full Stack" delay="0.3s"/>
                         <CardTeam name="Winder" img="img/team-3.jpg" skill="Full Stack" delay="0.5s"/>

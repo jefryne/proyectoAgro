@@ -50,7 +50,7 @@ export const ContactStart = () => {
                         <p className="section-title bg-white text-center text-primary px-3">Detalles de la Aplicación</p>
                         <h1 className="mb-5">Clasificador de Basura</h1>
                     </div>
-                    <div className="row g-5 text-center">
+                    <div id="s_formulario" className="row g-5 text-center">
                         <div className="col-lg-6 wow fadeInUp mx-auto" data-wow-delay="0.1s">
                             <p className="mb-4"><b>Utiliza nuestro clasificador de basura para identificar el tipo de basura en una imagen y determinar el contenedor adecuado.</b></p>
 
