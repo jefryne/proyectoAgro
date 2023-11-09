@@ -1,6 +1,5 @@
 const audioElement = new Audio();
 
-const apiUrl = 'https://api.elevenlabs.io/v1/text-to-speech/krhRXs3vGrYvfzQy24Ub/stream';
 const xiApiKey = '58d2540b63de9b7c439d0294b11a6412';
 
 if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
@@ -86,40 +85,40 @@ function hablar(texto_hablar) {
             if(data.result.prediction.topIntent == "Redirecionar"){
                 if(element.category == "Seccion"){
                     if(element.text == "reciclaje"){
-                        loadAndPlayAudio("yendo a reciclaje")
+                        loadAndPlayAudio("BJZ01fC9ZCAOW8zSrpQA")
                         window.location.href = "#s_reciclaje";
                     }else if (element.text == "análisis"){  
-                        loadAndPlayAudio("yendo a analisis")
+                        loadAndPlayAudio("MVoNBMIebgCzhbzoXZcS")
                         window.location.href = "#s_analisis";
                     }else if (element.text == "estadísticas "){  
-                        loadAndPlayAudio("yendo a estadisticas")
+                        loadAndPlayAudio("ZHinbkFkL4JUQY4LGB6X")
                         window.location.href = "#s_estadisticas";
                     }else if (element.text == "pie"){  
                         loadAndPlayAudio("yendo a pie de pagina")
                         window.location.href = "#s_pie";
                     }else if (element.text == "experiencia"){  
-                        loadAndPlayAudio("yendo a experiencia")
+                        loadAndPlayAudio("wtDHPGw4LK1aWI7qOSml")
                         window.location.href = "#s_experiencia";
                     }else if(element.text == "contacto"){
-                        loadAndPlayAudio("yendo a contacto")
+                        loadAndPlayAudio("M4v3iXXPBiCwn6Uf5fmC")
                         window.location.href = "http://localhost:5173/contact";
                     }else if(element.text == "formulario"){
-                        loadAndPlayAudio("yendo a formulario")
+                        loadAndPlayAudio("ITY9pOYokj19Fzwuqzf7")
                         window.location.href = "#s_formulario";
                     }else if(element.text == "integrantes"){
-                        loadAndPlayAudio("yendo a integrantes")
+                        loadAndPlayAudio("6xENwY3rXho00YgGerZ0")
                         window.location.href = "http://localhost:5173/team";
                     }
                 }
             }else if(data.result.prediction.topIntent == "Presentarse"){
                 if(element.category == "CosaPresentar"){
                     if(element.text == "aplicación"){
-                        loadAndPlayAudio("La aplicaion esta basada en el agro, contiene varias secciones como la seccion de reciclaje, analisis, experiencia y estadisticas con solo dicirme a que seccion quires dirigirte con gusto te llevare", "aplicacion")
+                        loadAndPlayAudio("PG2zpsP5K9JkifjsvKAM", "aplicacion")
                     }else if(element.text == "integrantes"){
-                        loadAndPlayAudio("Los integrates que conforman la ccreacion de aplicacion son Winder Roman, Julian Vasquez y Jeffry Nuñez todos estudiantes del sena ficha 25-58-265")
+                        loadAndPlayAudio("M4db6HAoCjH1NlKo4oqb")
                         window.location.href = "#s_integrates";
                     }else if(element.text == "funcionalidad"){
-                        loadAndPlayAudio("Hola soy kira, que hace referencia a Kit de Inteligencia y Respuesta Avanzada, fui desarrollaada por estudiantes del sena para guiarte en esta aplicacion, sera un gusto ayudarte.")
+                        loadAndPlayAudio("sTab5LS4slqmkDNOnKSq")
                     }
                 }
             }
@@ -145,38 +144,22 @@ function redirigirUnaVez() {
   
 
   
-  
-  
-  
-  
-  
-function loadAndPlayAudio(texto_hablar, intecion = "ninguna") {
-    const requestBody = {
-        text: texto_hablar,
-        model_id: "eleven_multilingual_v2",
-        voice_settings: {
-            stability: 0.5,
-            similarity_boost: 0.5
-        }
-    };
-
-
-    fetch(apiUrl, {
-            method: 'POST',
+function loadAndPlayAudio(id_historial, intecion = "ninguna") {
+    fetch(`https://api.elevenlabs.io/v1/history/${id_historial}/audio`, {
+            method: 'GET',
             headers: {
-            'accept': 'audio/mpeg',
-            'xi-api-key': xiApiKey,
-            'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(requestBody)
+                "accept": "audio/mpeg",
+                "xi-api-key": "58d2540b63de9b7c439d0294b11a6412"
+            }
         })
         .then(response => {
         if (!response.ok) {
-            throw new Error(`Error en la solicitud: ${response.status} - ${response.statusText}`);
+            console.log("Error en la solicitud");
         }
         return response.blob();
         })
         .then(audioBlob => {
+            console.log(audioBlob);
         const audioUrl = URL.createObjectURL(audioBlob);
         audioElement.src = audioUrl;
         audioElement.play(); // Reproducir el audio cuando esté listo
@@ -186,5 +169,5 @@ function loadAndPlayAudio(texto_hablar, intecion = "ninguna") {
         })
         .catch(error => {
         console.error('Error en la solicitud:', error);
-        });
-    }
+    });
+}
