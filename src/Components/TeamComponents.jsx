@@ -9,7 +9,7 @@ export function TeamStart() {
                     </div>
                     <div id="s_integrates" className="row g-4">
                         <CardTeam name="Jeffry" img="img/team-1.jpg" skill="Full Stack" delay="0.1s"/>
-                        <CardTeam name="Julian" img="img/team-2.jpg" skill="Full Stack" delay="0.3s"/>
+                        <CardTeam name="Julian" img="img/team-2.jpg" skill="Full Stack" delay="0.3s" href="https://www.youtube.com/watch?v=PGqyvq9l0Mo"/>
                         <CardTeam name="Winder" img="img/team-3.jpg" skill="Full Stack" delay="0.5s"/>
                     </div>
                 </div>
@@ -28,7 +28,7 @@ export function CardTeam(props) {
                     <p className="text-primary">{props.skill}</p>
                     <div className="d-flex justify-content-center">
                         <a className="btn btn-square btn-outline-secondary rounded-circle mx-1" href><i className="fab fa-facebook-f" /></a>
-                        <a className="btn btn-square btn-outline-secondary rounded-circle mx-1" href><i className="fab fa-twitter" /></a>
+                        <a className="btn btn-square btn-outline-secondary rounded-circle mx-1" href={props.href}><i className="fab fa-twitter" /></a>
                         <a className="btn btn-square btn-outline-secondary rounded-circle mx-1" href><i className="fab fa-instagram" /></a>
                     </div>
                 </div>

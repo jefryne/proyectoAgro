@@ -3,6 +3,7 @@ import Home from "../Pages/Home";
 import Contact from "../Pages/Contact";
 import { Team } from "../Pages/Team";
 import { Nav } from "../Components/Header&Footer";
+import { TempRoute } from "../Pages/temp";
 export default function Navegation() {
   return (
     <>
@@ -12,6 +13,7 @@ export default function Navegation() {
             <Route exact path="/" element={<Home/>} />
             <Route exact path="/contact" element={<Contact/>} />
             <Route exact path="/team" element={<Team/>} />
+            <Route exact path="/temp" element={<TempRoute/>} />
         </Routes>
       </Routers>
     </>
