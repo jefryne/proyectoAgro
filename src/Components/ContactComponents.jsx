@@ -33,17 +33,17 @@ export const ContactStart = () => {
                         setDetections(prevDetections => [...prevDetections, newDetection]);
                     }
 
-                    if (element.tagName == 'perro' && element.probability > 0.97) {
+                    if (element.tagName == 'Plastico' && element.probability > 0.97) {
                         let newElement = { tipo:element.tagName }
                         setcontAzul(prevAzul => [...prevAzul, newElement]);
                     }
 
-                    if (element.tagName == 'gato' && element.probability > 0.97) {
+                    if (element.tagName == 'Papel' && element.probability > 0.97) {
                         let newElement = { tipo:element.tagName }
                         setcontGris(prevGris => [...prevGris, newElement]);
                     }
 
-                    if (element.tagName == 'pato' && element.probability > 0.97) {
+                    if (element.tagName == 'No reciclable' && element.probability > 0.97) {
                         let newElement = { tipo:element.tagName }
                         setcontVerde(prevVerde => [...prevVerde, newElement]);
                     }
