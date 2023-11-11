@@ -5,6 +5,9 @@ export const ContactStart = () => {
     const [img, setImg] = useState('');
     const [detections, setDetections] = useState([]);
     const inputFile = useRef();
+    const [contGris, setcontGris] = useState([]);
+    const [contAzul, setcontAzul] = useState([]);
+    const [contVerde, setcontVerde] = useState([]);
 
     const uploadImg = async (event) => {
         const file = event.target.files[0];
@@ -16,7 +19,7 @@ export const ContactStart = () => {
                 console.log(response);
                 const arrayPrediction = response.predictions;
                 arrayPrediction.forEach(element => {
-                    if (element.probability > 0.90) {
+                    if (element.probability > 0.97) {
                         const newDetection = {
                             color: "red",
                             left: element.boundingBox.left,
@@ -29,6 +32,22 @@ export const ContactStart = () => {
 
                         setDetections(prevDetections => [...prevDetections, newDetection]);
                     }
+
+                    if (element.tagName == 'perro' && element.probability > 0.97) {
+                        let newElement = { tipo:element.tagName }
+                        setcontAzul(prevAzul => [...prevAzul, newElement]);
+                    }
+
+                    if (element.tagName == 'gato' && element.probability > 0.97) {
+                        let newElement = { tipo:element.tagName }
+                        setcontGris(prevGris => [...prevGris, newElement]);
+                    }
+
+                    if (element.tagName == 'pato' && element.probability > 0.97) {
+                        let newElement = { tipo:element.tagName }
+                        setcontVerde(prevVerde => [...prevVerde, newElement]);
+                    }
+
                 });
 
             };
@@ -40,6 +59,9 @@ export const ContactStart = () => {
         setImg('');
         inputFile.current.value = "";
         setDetections([]);
+        setcontAzul([]);
+        setcontVerde([]);
+        setcontGris([]);
     };
 
     return (
@@ -81,19 +103,44 @@ export const ContactStart = () => {
                                         </div>
                                     </div>
                                 </div>
-                                {/* TODAVIA FALTAN COSITAS */}
-                                <div className="row mt-5">
-                                    <h4>Contenedor adecuado:</h4>
-                                    <div className="col-4">
-                                        <img className="img-fluid" src="img/contenedor-gris.jpg" alt="" />
+
+
+
+
+                                {detections.length > 0 && (
+                                    <div className="row mt-5">
+                                        <h4>Contenedor adecuado:</h4>
+                                        {contAzul.length > 0 && (
+                                            <div className="col-4" >
+                                                <img className="img-fluid" src={`img/contenedor-azul.jpg`} alt="" />
+                                                {contAzul.map((item,index) => (
+                                                    <p key={index} >{item.tipo}</p>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        {contGris.length > 0 && (
+                                            <div className="col-4" >
+                                                <img className="img-fluid" src={`img/contenedor-gris.jpg`} alt="" />
+                                                {contGris.map((item,index) => (
+                                                    <p key={index} >{item.tipo}</p>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        {contVerde.length > 0 && (
+                                            <div className="col-4" >
+                                                <img className="img-fluid" src={`img/contenedor-verde.jpg`} alt="" />
+                                                {contVerde.map((item,index) => (
+                                                    <p key={index} >{item.tipo}</p>
+                                                ))}
+                                            </div>
+                                        )}
+
                                     </div>
-                                    <div className="col-4">
-                                        <img className="img-fluid" src="img/contenedor-azul.jpg" alt="" />
-                                    </div>
-                                    <div className="col-4">
-                                        <img className="img-fluid" src="img/contenedor-verde.jpg" alt="" />
-                                    </div>
-                                </div>
+                                )}
+                                {!detections.length && <p>No se han detectado objetos.</p>}
+
                                 <div className="col-12">
                                     <button className="btn btn-secondary rounded-pill py-3 px-5" type="button" onClick={clear}>Limpiar</button>
                                 </div>
@@ -108,10 +155,46 @@ export const ContactStart = () => {
 }
 
 export function ObjectDetec(props) {
+    const [hovered, setHovered] = useState(false);
+
+    const handleMouseEnter = () => {
+        setHovered(true);
+        console.log(`Mouse enter en ${props.nombre}`);
+    };
+
+    const handleMouseLeave = () => {
+        setHovered(false);
+    };
+
+    const positionStyle = {
+        color: hovered ? "green" : props.color,
+        left: `${props.left * 100}%`,
+        top: `${props.top * 100}%`,
+        width: `${props.width * 100}%`,
+        height: `${props.height * 100}%`,
+        border: hovered ? "2px solid green" : props.border
+    };
+
     return (
         <>
-            <div>
-                <div className="position-absolute" style={{ color: props.color, left: `${(props.left) * 100}%`, top: `${(props.top) * 100}%`, width: `${(props.width) * 100}%`, height: `${(props.height) * 100}%`, border: props.border }}> <b>{props.nombre}</b></div>
+            <div
+                className="position-absolute" 
+                style={positionStyle} 
+                onMouseEnter={handleMouseEnter} 
+                onMouseLeave={handleMouseLeave}>
+                <b>{props.nombre}</b>
+            </div>
+        </>
+    )
+}
+
+export const Contenedor = (props) => {
+
+    return (
+        <>
+            <div className="col-4 shadow-md">
+                <img className="img-fluid" src={`img/contenedor-${props.color}.jpg`} alt="" />
+                <p>{props.nombre}</p>
             </div>
         </>
     )
