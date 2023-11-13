@@ -14,6 +14,10 @@ const link = [
         name: "Team",
         href: "/team",
     },
+    {
+        name: "Classification",
+        href: "/classification",
+    },
 ];
 
 export function Nav() {

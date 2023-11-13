@@ -149,7 +149,6 @@ export const ContactStart = () => {
                     </div>
                 </div>
             </div>
-
         </>
     )
 }
@@ -183,18 +182,6 @@ export function ObjectDetec(props) {
                 onMouseEnter={handleMouseEnter} 
                 onMouseLeave={handleMouseLeave}>
                 <b>{props.nombre}</b>
-            </div>
-        </>
-    )
-}
-
-export const Contenedor = (props) => {
-
-    return (
-        <>
-            <div className="col-4 shadow-md">
-                <img className="img-fluid" src={`img/contenedor-${props.color}.jpg`} alt="" />
-                <p>{props.nombre}</p>
             </div>
         </>
     )
