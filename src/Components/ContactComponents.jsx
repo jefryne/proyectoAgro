@@ -19,7 +19,7 @@ export const ContactStart = () => {
                 console.log(response);
                 const arrayPrediction = response.predictions;
                 arrayPrediction.forEach(element => {
-                    if (element.probability > 0.97) {
+                    if (element.probability >= 0.89) {
                         const newDetection = {
                             color: "red",
                             left: element.boundingBox.left,
@@ -27,7 +27,7 @@ export const ContactStart = () => {
                             width: element.boundingBox.width,
                             height: element.boundingBox.height,
                             border: "2px solid red",
-                            nombre: element.tagName,
+                            nombre: `${element.tagName} - ${(element.probability * 100).toFixed(2)} %`,
                         };
 
                         setDetections(prevDetections => [...prevDetections, newDetection]);
