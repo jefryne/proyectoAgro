@@ -86,40 +86,40 @@ function hablar(texto_hablar) {
                 if (data.result.prediction.topIntent == "Redirecionar") {
                     if (element.category == "Seccion") {
                         if (element.text == "reciclaje") {
-                            loadAndPlayAudio("BJZ01fC9ZCAOW8zSrpQA")
+                            loadAudioBlob("BJZ01fC9ZCAOW8zSrpQA")
                             window.location.href = "#s_reciclaje";
                         } else if (element.text == "análisis") {
-                            loadAndPlayAudio("MVoNBMIebgCzhbzoXZcS")
+                            loadAudioBlob("MVoNBMIebgCzhbzoXZcS")
                             window.location.href = "#s_analisis";
                         } else if (element.text == "estadísticas ") {
-                            loadAndPlayAudio("ZHinbkFkL4JUQY4LGB6X")
+                            loadAudioBlob("ZHinbkFkL4JUQY4LGB6X")
                             window.location.href = "#s_estadisticas";
                         } else if (element.text == "pie") {
-                            loadAndPlayAudio("yendo a pie de pagina")
+                            loadAudioBlob("yendo a pie de pagina")
                             window.location.href = "#s_pie";
                         } else if (element.text == "experiencia") {
-                            loadAndPlayAudio("wtDHPGw4LK1aWI7qOSml")
+                            loadAudioBlob("wtDHPGw4LK1aWI7qOSml")
                             window.location.href = "#s_experiencia";
                         } else if (element.text == "contacto") {
-                            loadAndPlayAudio("M4v3iXXPBiCwn6Uf5fmC")
+                            loadAudioBlob("M4v3iXXPBiCwn6Uf5fmC")
                             window.location.href = "http://localhost:5173/contact";
                         } else if (element.text == "formulario") {
-                            loadAndPlayAudio("ITY9pOYokj19Fzwuqzf7")
+                            loadAudioBlob("ITY9pOYokj19Fzwuqzf7")
                             window.location.href = "#s_formulario";
                         } else if (element.text == "integrantes") {
-                            loadAndPlayAudio("6xENwY3rXho00YgGerZ0")
+                            loadAudioBlob("6xENwY3rXho00YgGerZ0")
                             window.location.href = "http://localhost:5173/team";
                         }
                     }
                 } else if (data.result.prediction.topIntent == "Presentarse") {
                     if (element.category == "CosaPresentar") {
                         if (element.text == "aplicación") {
-                            loadAndPlayAudio("PG2zpsP5K9JkifjsvKAM", "aplicacion")
+                            loadAudioBlob("PG2zpsP5K9JkifjsvKAM", "aplicacion")
                         } else if (element.text == "integrantes") {
-                            loadAndPlayAudio("M4db6HAoCjH1NlKo4oqb")
+                            loadAudioBlob("M4db6HAoCjH1NlKo4oqb")
                             window.location.href = "#s_integrates";
                         } else if (element.text == "funcionalidad") {
-                            loadAndPlayAudio("sTab5LS4slqmkDNOnKSq")
+                            loadAudioBlob("sTab5LS4slqmkDNOnKSq")
                         }
                     }
                 }
@@ -171,4 +171,38 @@ function loadAndPlayAudio(id_historial, intecion = "ninguna") {
         .catch(error => {
             console.error('Error en la solicitud:', error);
         });
+}
+
+let wave = new CircularAudioWave(document.getElementById('chart-container'));
+function loadAudioBlob(endpoint) {
+    fetch(`https://api.elevenlabs.io/v1/history/${endpoint}/audio`, {
+        "headers": {
+        "accept": "audio/mpeg",
+        "xi-api-key": xiApiKey
+        }   
+    }).then(response => {
+        console.log(response);
+        return response.blob();
+    }).then(audioBlob => {
+        wave = new CircularAudioWave(document.getElementById('chart-container'));
+        const audioUrl = URL.createObjectURL(audioBlob);
+        audioElement.src = audioUrl;
+        
+        audioElement.addEventListener('loadedmetadata', () => {
+            const DURATION = audioElement.duration;
+            const MS = DURATION * 1070;
+            console.log('Duracion en ms:', MS);
+            console.log('Duración del audio:', DURATION);
+            setTimeout(function() {
+                console.log('Audio terminado');
+                wave.destroy();
+            }, MS);
+        });
+        wave.loadAudio(audioUrl);
+        setTimeout(function () {
+        wave.play();
+        }, 1000);
+    }).catch(error => {
+        console.error('Error en la solicitud:', error);
+    });
 }

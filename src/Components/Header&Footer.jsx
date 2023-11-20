@@ -14,10 +14,6 @@ const link = [
         name: "Team",
         href: "/team",
     },
-    {
-        name: "Temp",
-        href: "/temp",
-    },
 ];
 
 export function Nav() {

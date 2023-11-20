@@ -1,13 +1,14 @@
-const tempKey = '607e8d8b3ac67b92e042a66142a3c64f';
+const tempKey = '58d2540b63de9b7c439d0294b11a6412';
 console.log("hola mundo desde app.js");
-const audioElementTemp   = new Audio();
+const audioElementTemp = new Audio();
 
-let wave = new CircularAudioWave(document.getElementById('chart-container'));
+//let wave = new CircularAudioWave(document.getElementById('chart-container'));
 console.log(wave);
-let isPlayed = false
+/* let isPlayed = false */
 
+/* let endpoint = "M4db6HAoCjH1NlKo4oqb"
 document.addEventListener('DOMContentLoaded', function() {
-  loadAudioBlob();
+  loadAudioBlob(endpoint);
   window.addEventListener('scroll', function() {
     if(!isPlayed) {
       isPlayed = true;
@@ -15,9 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
+ */
 
-function loadAudioBlob() {
-  fetch("https://api.elevenlabs.io/v1/history/uOGRF25eNOXCtBig5Tee/audio", {
+function loadAudioBlob(endpoint) {
+  fetch(`https://api.elevenlabs.io/v1/history/${endpoint}/audio`, {
     "headers": {
       "accept": "audio/mpeg",
       "xi-api-key": tempKey
@@ -26,10 +28,11 @@ function loadAudioBlob() {
     console.log(response);
     return response.blob();
   }).then(audioBlob => {
+    wave = new CircularAudioWave(document.getElementById('chart-container'));
     const audioUrl = URL.createObjectURL(audioBlob);
-    audioElementTemp  .src = audioUrl;
+    audioElementTemp.src = audioUrl;
     wave.loadAudio(audioUrl);
-
+    wave.play();
   })
   .catch(error => {
     console.error('Error en la solicitud:', error);
