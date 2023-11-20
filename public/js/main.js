@@ -63,5 +63,3 @@
 
     
 })(jQuery);
-
-console.log("Hola mundo");
