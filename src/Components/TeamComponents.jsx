@@ -4,13 +4,13 @@ export function TeamStart() {
             <div className="container-xxl py-5">
                 <div className="container">
                     <div className="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style={{ maxWidth: 500 }}>
-                        <p className="section-title bg-white text-center text-primary px-3">Our Team</p>
-                        <h1 className="mb-5">Experienced Team Members</h1>
+                        <p className="section-title bg-white text-center text-primary px-3">Nuestro Equipo</p>
+                        <h1 className="mb-5">Miembros con Experiencia</h1>
                     </div>
                     <div id="s_integrates" className="row g-4">
-                        <CardTeam name="Jeffry" img="img/team-1.jpg" skill="Full Stack" delay="0.1s"/>
-                        <CardTeam name="Julian" img="img/team-2.jpg" skill="Full Stack" delay="0.3s" github="https://github.com/Midnightgb"/>
-                        <CardTeam name="Winder" img="img/team-3.jpg" skill="Full Stack" delay="0.5s"/>
+                        <CardTeam name="Jeffry" img="img/team-1.jpg" skill="Desarrollador Full Stack" delay="0.1s"/>
+                        <CardTeam name="Julian" img="img/team-2.jpg" skill="Desarrollador Full Stack" delay="0.3s" github="https://github.com/Midnightgb"/>
+                        <CardTeam name="Winder" img="img/team-3.jpg" skill="Desarrollador Full Stack" delay="0.5s"/>
                     </div>
                 </div>
             </div>
@@ -27,13 +27,12 @@ export function CardTeam(props) {
                     <h5>{props.name}</h5>
                     <p className="text-primary">{props.skill}</p>
                     <div className="d-flex justify-content-center">
-                        <a className="btn btn-square btn-outline-secondary rounded-circle mx-1" href><i className="fab fa-facebook-f" /></a>
+                        <a className="btn btn-square btn-outline-secondary rounded-circle mx-1" href="/"><i className="fab fa-facebook-f" /></a>
                         <a className="btn btn-square btn-outline-secondary rounded-circle mx-1" href={props.github}><i className="fab fa-github" /></a>
-                        <a className="btn btn-square btn-outline-secondary rounded-circle mx-1" href><i className="fab fa-instagram" /></a>
+                        <a className="btn btn-square btn-outline-secondary rounded-circle mx-1" href="/"><i className="fab fa-instagram" /></a>
                     </div>
                 </div>
             </div>  
         </>
     )
 }
-

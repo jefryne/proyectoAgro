@@ -12,9 +12,6 @@ if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
 
     let fullTranscript = ''; // Variable para almacenar la transcripción completa
 
-
-
-
     recognition.start();
 
 
