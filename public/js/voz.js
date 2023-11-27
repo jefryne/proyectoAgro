@@ -170,6 +170,11 @@ function loadAndPlayAudio(id_historial, intecion = "ninguna") {
         });
 }
 
+loadAudioBlob("M4db6HAoCjH1NlKo4oqb", "aplicacion")
+//linea para cambiar colores del blob 14938
+let audio = document.getElementById("voiceBlob");
+audio.style.visibility = "hidden";
+
 let wave = new CircularAudioWave(document.getElementById('chart-container'));
 function loadAudioBlob(endpoint) {
     fetch(`https://api.elevenlabs.io/v1/history/${endpoint}/audio`, {
@@ -181,6 +186,7 @@ function loadAudioBlob(endpoint) {
         console.log(response);
         return response.blob();
     }).then(audioBlob => {
+        audio.style.visibility = "visible";
         wave = new CircularAudioWave(document.getElementById('chart-container'));
         const audioUrl = URL.createObjectURL(audioBlob);
         audioElement.src = audioUrl;
@@ -193,6 +199,7 @@ function loadAudioBlob(endpoint) {
             setTimeout(function() {
                 console.log('Audio terminado');
                 wave.destroy();
+                audio.style.visibility = "hidden";
             }, MS);
         });
         wave.loadAudio(audioUrl);
