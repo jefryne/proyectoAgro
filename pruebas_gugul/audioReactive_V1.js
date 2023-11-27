@@ -79,7 +79,7 @@ function visualize() {
     drawCircle(x, y, radius * scale, color);
 
     // Dibujar las ondas alrededor del círculo
-    const waveCount = 6; // Cantidad de ondas alrededor del círculo
+    const waveCount = 66; // Cantidad de ondas alrededor del círculo
     const angleIncrement = (Math.PI * 2) / waveCount; // Incremento del ángulo para cada onda
   
     ctx.beginPath();
