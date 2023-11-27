@@ -1,5 +1,4 @@
-const audioElement = new Audio();
-console.log("hola mundo desde voz.js");
+let audioElement = new Audio();
 const xiApiKey = '58d2540b63de9b7c439d0294b11a6412';
 
 if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
@@ -142,49 +141,26 @@ function redirigirUnaVez() {
 
     redirigir(0);
 }
-
-
-
-function loadAndPlayAudio(id_historial, intecion = "ninguna") {
-    fetch(`https://api.elevenlabs.io/v1/history/${id_historial}/audio`, {
-            method: 'GET',
-            headers: {
-                "accept": "audio/mpeg",
-                "xi-api-key": xiApiKey
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                console.log("Error en la solicitud");
-            }
-            return response.blob();
-        })
-        .then(audioBlob => {
-            console.log(audioBlob);
-            const audioUrl = URL.createObjectURL(audioBlob);
-            audioElement.src = audioUrl;
-            audioElement.play(); // Reproducir el audio cuando esté listo
-            if (intecion == "aplicacion") {
-                redirigirUnaVez()
-            }
-        })
-        .catch(error => {
-            console.error('Error en la solicitud:', error);
-        });
-}
+let audioSilenced = true;
 
 loadAudioBlob("M4db6HAoCjH1NlKo4oqb", "aplicacion")
+
 //linea para cambiar colores del blob 14938
 let audio = document.getElementById("voiceBlob");
 audio.style.visibility = "hidden";
 
 let wave = new CircularAudioWave(document.getElementById('chart-container'));
+
 function loadAudioBlob(endpoint) {
+    if (audioSilenced) {
+        console.log("no se puede reproducir audio, esta silenciado");
+        return;
+    }
     fetch(`https://api.elevenlabs.io/v1/history/${endpoint}/audio`, {
         "headers": {
-        "accept": "audio/mpeg",
-        "xi-api-key": xiApiKey
-        }   
+            "accept": "audio/mpeg",
+            "xi-api-key": xiApiKey
+        }
     }).then(response => {
         console.log(response);
         return response.blob();
@@ -193,13 +169,12 @@ function loadAudioBlob(endpoint) {
         wave = new CircularAudioWave(document.getElementById('chart-container'));
         const audioUrl = URL.createObjectURL(audioBlob);
         audioElement.src = audioUrl;
-        
         audioElement.addEventListener('loadedmetadata', () => {
             const DURATION = audioElement.duration;
             const MS = DURATION * 1070;
             console.log('Duracion en ms:', MS);
             console.log('Duración del audio:', DURATION);
-            setTimeout(function() {
+            setTimeout(function () {
                 console.log('Audio terminado');
                 wave.destroy();
                 audio.style.visibility = "hidden";
@@ -207,9 +182,24 @@ function loadAudioBlob(endpoint) {
         });
         wave.loadAudio(audioUrl);
         setTimeout(function () {
-        wave.play();
+            wave.play();
         }, 1000);
     }).catch(error => {
         console.error('Error en la solicitud:', error);
     });
+}
+
+document.getElementById('audioToggle').addEventListener('click', toggleAudio);
+let imgAudio = document.getElementById("imgAudio");
+
+function toggleAudio() {
+    if (audioSilenced) {
+        console.log("quitar silencio");
+        audioSilenced = false;
+        imgAudio.src = "/img/icons8-audio-50.png";
+        setTimeout(function () {
+            document.getElementById("audioToggle").style.visibility = "hidden";
+        }, 1000);
+    }
+
 }
