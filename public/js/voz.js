@@ -173,6 +173,8 @@ function loadAndPlayAudio(id_historial, intecion = "ninguna") {
         });
 }
 
+loadAudioBlob("M4db6HAoCjH1NlKo4oqb", "aplicacion")
+let audio = document.getElementById("voiceBlob");
 let wave = new CircularAudioWave(document.getElementById('chart-container'));
 function loadAudioBlob(endpoint) {
     fetch(`https://api.elevenlabs.io/v1/history/${endpoint}/audio`, {
