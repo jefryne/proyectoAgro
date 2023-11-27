@@ -173,7 +173,7 @@ function loadAndPlayAudio(id_historial, intecion = "ninguna") {
         });
 }
 
-loadAudioBlob("M4db6HAoCjH1NlKo4oqb", "aplicacion")
+//loadAudioBlob("M4db6HAoCjH1NlKo4oqb", "aplicacion")
 //linea para cambiar colores del blob 14938
 let audio = document.getElementById("voiceBlob");
 audio.style.visibility = "hidden";
