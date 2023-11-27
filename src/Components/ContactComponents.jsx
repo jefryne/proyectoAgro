@@ -8,6 +8,89 @@ export const ContactStart = () => {
     const [contGris, setcontGris] = useState([]);
     const [contAzul, setcontAzul] = useState([]);
     const [contVerde, setcontVerde] = useState([]);
+    const [stream, setStream] = useState(null);
+    const [imageCapture, setImageCapture] = useState(null);
+    const [isCameraOpen, setIsCameraOpen] = useState(false);
+    const videoRef = useRef(null);
+
+    const startCamera = async () => {
+        try {
+            console.log("entro a la funcion");
+
+            const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+            const track = mediaStream.getVideoTracks()[0];
+            const capture = new ImageCapture(track);
+
+            setStream(mediaStream);
+            setImageCapture(capture);
+            setIsCameraOpen(true); // Nuevo estado para indicar que la cámara está abierta
+            if (videoRef.current) {
+                videoRef.current.srcObject = mediaStream;
+            }
+        } catch (error) {
+            console.error("Error al abrir la cámara:", error);
+            setIsCameraOpen(false); // Actualizar el estado en caso de error
+        }
+    };
+
+
+    const takePhoto = async () => {
+        try {
+            console.log("entro a la funcion");
+            if (!imageCapture) {
+                console.error("La cámara no está abierta.");
+                return;
+            }
+
+            const photoBlob = await imageCapture.takePhoto();
+            const imageURL = URL.createObjectURL(photoBlob);
+
+            setImg(imageURL);
+            setIsCameraOpen(false);
+
+            const file = new File([photoBlob], "photo.jpg", { type: "image/jpeg" });
+            const response = await getDetection(file);
+
+            const arrayPrediction = response.predictions;
+            const newDetections = [];
+
+            arrayPrediction.forEach((element) => {
+                if (element.probability >= 0.95) {
+                    const newDetection = {
+                        color: "red",
+                        left: element.boundingBox.left,
+                        top: element.boundingBox.top,
+                        width: element.boundingBox.width,
+                        height: element.boundingBox.height,
+                        border: "2px solid red",
+                        nombre: `${element.tagName} - ${(element.probability * 100).toFixed(2)} %`,
+                    };
+
+                    newDetections.push(newDetection);
+                }
+
+                // Resto del código de detecciones (contAzul, contGris, contVerde) sigue igual
+                if (element.tagName == 'Plastico' && element.probability > 0.97) {
+                    let newElement = { tipo: element.tagName }
+                    setcontAzul(prevAzul => [...prevAzul, newElement]);
+                }
+
+                if (element.tagName == 'Papel' && element.probability > 0.97) {
+                    let newElement = { tipo: element.tagName }
+                    setcontGris(prevGris => [...prevGris, newElement]);
+                }
+
+                if (element.tagName == 'No reciclable' && element.probability > 0.97) {
+                    let newElement = { tipo: element.tagName }
+                    setcontVerde(prevVerde => [...prevVerde, newElement]);
+                }
+
+                setDetections(newDetections);
+            });
+        } catch (error) {
+            console.error("Error al tomar la foto o procesarla:", error);
+        }
+    };
 
     const uploadImg = async (event) => {
         const file = event.target.files[0];
@@ -33,18 +116,18 @@ export const ContactStart = () => {
                         setDetections(prevDetections => [...prevDetections, newDetection]);
                     }
 
-                    if (element.tagName == 'Plastico' && element.probability > 0.97) {
-                        let newElement = { tipo:element.tagName }
+                    if (element.tagName == 'Plastico' && element.probability > 0.99) {
+                        let newElement = { tipo: element.tagName }
                         setcontAzul(prevAzul => [...prevAzul, newElement]);
                     }
 
                     if (element.tagName == 'Papel' && element.probability > 0.97) {
-                        let newElement = { tipo:element.tagName }
+                        let newElement = { tipo: element.tagName }
                         setcontGris(prevGris => [...prevGris, newElement]);
                     }
 
                     if (element.tagName == 'No reciclable' && element.probability > 0.97) {
-                        let newElement = { tipo:element.tagName }
+                        let newElement = { tipo: element.tagName }
                         setcontVerde(prevVerde => [...prevVerde, newElement]);
                     }
 
@@ -62,6 +145,10 @@ export const ContactStart = () => {
         setcontAzul([]);
         setcontVerde([]);
         setcontGris([]);
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+        }
+        setIsCameraOpen(false);
     };
 
     return (
@@ -77,12 +164,35 @@ export const ContactStart = () => {
                             <p className="mb-4"><b>Utiliza nuestro clasificador de basura para identificar el tipo de basura en una imagen y determinar el contenedor adecuado.</b></p>
 
                             <div className="row g-3">
+
                                 <div className="col-md-12">
                                     <div className="form-floating">
                                         <input type="file" ref={inputFile} className="form-control" accept="image/*" onChange={uploadImg} />
                                         <label htmlFor="">IMAGEN A DETECTAR</label>
                                     </div>
                                 </div>
+
+                                <div className="col-md-12">
+                                    <div className="form-floating">
+                                        <button type="button" className="btn btn-primary" onClick={startCamera}>
+                                            Abrir Cámara
+                                        </button>
+                                    </div>
+                                </div>
+                                {isCameraOpen && (
+                                    <div className="col-md-12">
+                                        <video ref={videoRef} autoPlay playsInline className="img-fluid" width="640" height="480" />
+                                    </div>
+                                )}
+
+                                <div className="col-md-12">
+                                    <div className="form-floating">
+                                        <button type="button" className="btn btn-primary" onClick={takePhoto} disabled={!isCameraOpen}>
+                                            Tomar Foto
+                                        </button>
+                                    </div>
+                                </div>
+
 
                                 <div className="col-12">
                                     <div className="position-relative mt-5">
@@ -113,7 +223,7 @@ export const ContactStart = () => {
                                         {contAzul.length > 0 && (
                                             <div className="col-4" >
                                                 <img className="img-fluid" src={`img/contenedor-azul.jpg`} alt="" />
-                                                {contAzul.map((item,index) => (
+                                                {contAzul.map((item, index) => (
                                                     <p key={index} >{item.tipo}</p>
                                                 ))}
                                             </div>
@@ -122,7 +232,7 @@ export const ContactStart = () => {
                                         {contGris.length > 0 && (
                                             <div className="col-4" >
                                                 <img className="img-fluid" src={`img/contenedor-gris.jpg`} alt="" />
-                                                {contGris.map((item,index) => (
+                                                {contGris.map((item, index) => (
                                                     <p key={index} >{item.tipo}</p>
                                                 ))}
                                             </div>
@@ -131,7 +241,7 @@ export const ContactStart = () => {
                                         {contVerde.length > 0 && (
                                             <div className="col-4" >
                                                 <img className="img-fluid" src={`img/contenedor-verde.jpg`} alt="" />
-                                                {contVerde.map((item,index) => (
+                                                {contVerde.map((item, index) => (
                                                     <p key={index} >{item.tipo}</p>
                                                 ))}
                                             </div>
@@ -157,8 +267,10 @@ export function ObjectDetec(props) {
     const [hovered, setHovered] = useState(false);
 
     const handleMouseEnter = () => {
+
         setHovered(true);
         console.log(`Mouse enter en ${props.nombre}`);
+
     };
 
     const handleMouseLeave = () => {
@@ -177,9 +289,9 @@ export function ObjectDetec(props) {
     return (
         <>
             <div
-                className="position-absolute" 
-                style={positionStyle} 
-                onMouseEnter={handleMouseEnter} 
+                className="position-absolute"
+                style={positionStyle}
+                onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}>
                 <b>{props.nombre}</b>
             </div>
