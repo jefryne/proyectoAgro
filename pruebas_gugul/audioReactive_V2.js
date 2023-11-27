@@ -1,8 +1,8 @@
 let canvas = document.querySelector("canvas");
 let audio = document.querySelector("audio");
 
-canvas.width = window.innerWidth * 0.8;
-canvas.height = window.innerHeight * 0.8;
+canvas.width = 300
+canvas.height = 300
 
 let wave = new Wave(audio, canvas);
 
@@ -33,8 +33,8 @@ function GlobAnimation() {
           strength: 15,
           color: "#FF8F8F"
         },
-        lineWidth: 10,
-        count: 40,
+        lineWidth: 5,
+        count: 30,
       })
     );
     GlobAnimationAdded = true;
