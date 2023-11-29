@@ -81,12 +81,12 @@ function hablar(texto_hablar) {
             console.log(data.result.prediction.topIntent);
             data.result.prediction.entities.forEach(element => {
                 if (data.result.prediction.topIntent == "Redirecionar") {
-                    if (element.category == "Seccion") {
+                    if (element.category == "Seccion" || element.category == "sección") {
                         if (element.text == "reciclaje") {
                             loadAudioBlob("BJZ01fC9ZCAOW8zSrpQA")
                             window.location.href = "#s_reciclaje";
-                        } else if (element.text == "análisis") {
-                            loadAudioBlob("MVoNBMIebgCzhbzoXZcS")
+                        } else if (element.text == "contacto") {
+                            loadAudioBlob("M4v3iXXPBiCwn6Uf5fmC")
                             window.location.href = "#s_analisis";
                         } else if (element.text == "estadísticas ") {
                             loadAudioBlob("ZHinbkFkL4JUQY4LGB6X")
@@ -97,15 +97,19 @@ function hablar(texto_hablar) {
                         } else if (element.text == "experiencia") {
                             loadAudioBlob("wtDHPGw4LK1aWI7qOSml")
                             window.location.href = "#s_experiencia";
-                        } else if (element.text == "contacto") {
-                            loadAudioBlob("M4v3iXXPBiCwn6Uf5fmC")
+                        } else if (element.text == "reconocimiento") {
+                            // loadAudioBlob("MVoNBMIebgCzhbzoXZcS")
                             window.location.href = "http://localhost:5173/contact";
-                        } else if (element.text == "formulario") {
+                        } else if (element.text == "clasificador") {
+                            ////////////poner audio de que se clasifica
                             loadAudioBlob("ITY9pOYokj19Fzwuqzf7")
                             window.location.href = "#s_formulario";
                         } else if (element.text == "integrantes") {
                             loadAudioBlob("6xENwY3rXho00YgGerZ0")
                             window.location.href = "http://localhost:5173/team";
+                        }else if (element.text == "clasificación") {
+                           ////////////// texto de la cosas que se clasifican
+                            window.location.href = "http://localhost:5173/classification";
                         }
                     }
                 } else if (data.result.prediction.topIntent == "Presentarse") {
@@ -170,13 +174,13 @@ function loadAndPlayAudio(id_historial, intecion = "ninguna") {
         });
 }
 
-loadAudioBlob("M4db6HAoCjH1NlKo4oqb", "aplicacion")
+// loadAudioBlob("M4db6HAoCjH1NlKo4oqb", "aplicacion")
 //linea para cambiar colores del blob 14938
 let audio = document.getElementById("voiceBlob");
 audio.style.visibility = "hidden";
 
 let wave = new CircularAudioWave(document.getElementById('chart-container'));
-function loadAudioBlob(endpoint) {
+function loadAudioBlob(endpoint, intecion) {
     fetch(`https://api.elevenlabs.io/v1/history/${endpoint}/audio`, {
         "headers": {
         "accept": "audio/mpeg",
@@ -204,8 +208,12 @@ function loadAudioBlob(endpoint) {
         });
         wave.loadAudio(audioUrl);
         setTimeout(function () {
-        wave.play();
+            wave.play();
+            if (intecion == "aplicacion") {
+                redirigirUnaVez()
+            }
         }, 1000);
+
     }).catch(error => {
         console.error('Error en la solicitud:', error);
     });

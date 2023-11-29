@@ -3,19 +3,19 @@ import { Link } from 'react-router-dom';
 
 const link = [
     {
-        name: "Home",
+        name: "Inicio",
         href: "/",
     },
     {
-        name: "Contact",
+        name: "Contacto",
         href: "/contact",
     },
     {
-        name: "Team",
+        name: "Integrantes",
         href: "/team",
     },
     {
-        name: "Classification",
+        name: "clasificacion",
         href: "/classification",
     },
 ];
