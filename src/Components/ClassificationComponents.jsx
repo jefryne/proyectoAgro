@@ -108,7 +108,7 @@ export function ClassificationStart() {
                                 </div>
                                 <div className="col-12">
                                     <div className="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style={{ maxWidth: 500 }}>
-                                        {resultName && <span className="section-title bg-white text-center text-primary px-3">Raza identificada: <b>{resultName}</b></span>} 
+                                        {resultName && <h2 className="section-title bg-white text-center text-primary px-3">Raza identificada: <b>{resultName}</b></h2>} 
                                         {resultAccuracy && <span className="section-title bg-white text-center text-primary px-3">Presición: <b>{resultAccuracy}</b>%</span>} 
                                     </div>
                                 </div>
