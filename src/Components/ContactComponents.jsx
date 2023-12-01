@@ -1,42 +1,64 @@
 import { getDetection } from "../Api/getData";
-import { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 export const ContactStart = () => {
     const [img, setImg] = useState('');
     const [detections, setDetections] = useState([]);
     const inputFile = useRef();
-    const [contGris, setcontGris] = useState([]);
     const [contAzul, setcontAzul] = useState([]);
     const [contVerde, setcontVerde] = useState([]);
     const [stream, setStream] = useState(null);
     const [imageCapture, setImageCapture] = useState(null);
     const [isCameraOpen, setIsCameraOpen] = useState(false);
     const videoRef = useRef(null);
+    const canvasRef = useRef(null);
 
     const startCamera = async () => {
         try {
-            console.log("entro a la funcion");
-
             const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
             const track = mediaStream.getVideoTracks()[0];
             const capture = new ImageCapture(track);
-
+    
             setStream(mediaStream);
             setImageCapture(capture);
-            setIsCameraOpen(true); // Nuevo estado para indicar que la cámara está abierta
-            if (videoRef.current) {
-                videoRef.current.srcObject = mediaStream;
+            setIsCameraOpen(true);
+    
+            const video = videoRef.current;
+            if (video) {
+                video.srcObject = mediaStream;
+            
+                // Configuración inicial del canvas
+                const canvas = canvasRef.current;
+                const context = canvas.getContext("2d");
+            
+                video.addEventListener("loadedmetadata", () => {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                });
+            
+                video.addEventListener("play", () => {
+                    const drawFrame = () => {
+                        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        requestAnimationFrame(drawFrame);
+                    };
+                    drawFrame();
+                });
+            } else {
+                console.error("El elemento de video es nulo");
             }
+    
         } catch (error) {
             console.error("Error al abrir la cámara:", error);
-            setIsCameraOpen(false); // Actualizar el estado en caso de error
+            setIsCameraOpen(false);
         }
     };
+    
+    
+
 
 
     const takePhoto = async () => {
         try {
-            console.log("entro a la funcion");
             if (!imageCapture) {
                 console.error("La cámara no está abierta.");
                 return;
@@ -50,12 +72,12 @@ export const ContactStart = () => {
 
             const file = new File([photoBlob], "photo.jpg", { type: "image/jpeg" });
             const response = await getDetection(file);
-
+            console.log(response);
             const arrayPrediction = response.predictions;
             const newDetections = [];
 
             arrayPrediction.forEach((element) => {
-                if (element.probability >= 0.95) {
+                if (element.probability >= 0.97) {
                     const newDetection = {
                         color: "red",
                         left: element.boundingBox.left,
@@ -69,24 +91,20 @@ export const ContactStart = () => {
                     newDetections.push(newDetection);
                 }
 
-                // Resto del código de detecciones (contAzul, contGris, contVerde) sigue igual
-                if (element.tagName == 'Plastico' && element.probability > 0.97) {
+                if (element.tagName === 'Plastico' && element.probability > 0.98) {
                     let newElement = { tipo: element.tagName }
                     setcontAzul(prevAzul => [...prevAzul, newElement]);
                 }
 
-                if (element.tagName == 'Papel' && element.probability > 0.97) {
-                    let newElement = { tipo: element.tagName }
-                    setcontGris(prevGris => [...prevGris, newElement]);
-                }
 
-                if (element.tagName == 'No reciclable' && element.probability > 0.97) {
+                if (element.tagName === 'No reciclable' && element.probability > 0.97) {
                     let newElement = { tipo: element.tagName }
                     setcontVerde(prevVerde => [...prevVerde, newElement]);
                 }
 
                 setDetections(newDetections);
             });
+            cleanupCamera();
         } catch (error) {
             console.error("Error al tomar la foto o procesarla:", error);
         }
@@ -102,7 +120,7 @@ export const ContactStart = () => {
                 console.log(response);
                 const arrayPrediction = response.predictions;
                 arrayPrediction.forEach(element => {
-                    if (element.probability >= 0.89) {
+                    if (element.probability >= 0.99) {
                         const newDetection = {
                             color: "red",
                             left: element.boundingBox.left,
@@ -116,17 +134,14 @@ export const ContactStart = () => {
                         setDetections(prevDetections => [...prevDetections, newDetection]);
                     }
 
-                    if (element.tagName == 'Plastico' && element.probability > 0.99) {
+                    if (element.tagName === 'Plastico' && element.probability > 0.99) {
                         let newElement = { tipo: element.tagName }
                         setcontAzul(prevAzul => [...prevAzul, newElement]);
                     }
 
-                    if (element.tagName == 'Papel' && element.probability > 0.97) {
-                        let newElement = { tipo: element.tagName }
-                        setcontGris(prevGris => [...prevGris, newElement]);
-                    }
+                    
 
-                    if (element.tagName == 'No reciclable' && element.probability > 0.97) {
+                    if (element.tagName === 'No reciclable' && element.probability > 0.97) {
                         let newElement = { tipo: element.tagName }
                         setcontVerde(prevVerde => [...prevVerde, newElement]);
                     }
@@ -143,13 +158,32 @@ export const ContactStart = () => {
         inputFile.current.value = "";
         setDetections([]);
         setcontAzul([]);
-        setcontVerde([]);
-        setcontGris([]);
+        setcontVerde([]);        
+        cleanupCamera();
+    };
+
+    const cleanupCamera = () => {
         if (stream) {
             stream.getTracks().forEach(track => track.stop());
         }
-        setIsCameraOpen(false);
+        setStream(null);
+        setImageCapture(null);
+
+        // Limpiar el contenido del video
+        const video = videoRef.current;
+        if (video) {
+            video.srcObject = null;
+        }
+
+        // Limpiar el contenido del canvas
+        const canvas = canvasRef.current;
+        if (canvas) {
+            const context = canvas.getContext("2d");
+            context.clearRect(0, 0, canvas.width, canvas.height);
+        }
+        
     };
+
 
     return (
         <>
@@ -179,11 +213,6 @@ export const ContactStart = () => {
                                         </button>
                                     </div>
                                 </div>
-                                {isCameraOpen && (
-                                    <div className="col-md-12">
-                                        <video ref={videoRef} autoPlay playsInline className="img-fluid" width="640" height="480" />
-                                    </div>
-                                )}
 
                                 <div className="col-md-12">
                                     <div className="form-floating">
@@ -193,6 +222,14 @@ export const ContactStart = () => {
                                     </div>
                                 </div>
 
+                                {/* Agrega el canvas para mostrar la vista de la cámara */}
+                                
+                                    <div className="col-md-12">
+                                        <video ref={videoRef} autoPlay playsInline style={{ maxWidth: '100%' }}></video>
+                                        <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
+                                    </div>
+                                
+                               
 
                                 <div className="col-12">
                                     <div className="position-relative mt-5">
@@ -224,15 +261,6 @@ export const ContactStart = () => {
                                             <div className="col-4" >
                                                 <img className="img-fluid" src={`img/contenedor-azul.jpg`} alt="" />
                                                 {contAzul.map((item, index) => (
-                                                    <p key={index} >{item.tipo}</p>
-                                                ))}
-                                            </div>
-                                        )}
-
-                                        {contGris.length > 0 && (
-                                            <div className="col-4" >
-                                                <img className="img-fluid" src={`img/contenedor-gris.jpg`} alt="" />
-                                                {contGris.map((item, index) => (
                                                     <p key={index} >{item.tipo}</p>
                                                 ))}
                                             </div>
