@@ -5,6 +5,7 @@ export const ContactStart = () => {
     const [img, setImg] = useState('');
     const [detections, setDetections] = useState([]);
     const inputFile = useRef();
+    const [contGris, setcontGris] = useState([]);
     const [contAzul, setcontAzul] = useState([]);
     const [contVerde, setcontVerde] = useState([]);
     const [stream, setStream] = useState(null);
@@ -18,24 +19,24 @@ export const ContactStart = () => {
             const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
             const track = mediaStream.getVideoTracks()[0];
             const capture = new ImageCapture(track);
-    
+
             setStream(mediaStream);
             setImageCapture(capture);
             setIsCameraOpen(true);
-    
+
             const video = videoRef.current;
             if (video) {
                 video.srcObject = mediaStream;
-            
+
                 // Configuración inicial del canvas
                 const canvas = canvasRef.current;
                 const context = canvas.getContext("2d");
-            
+
                 video.addEventListener("loadedmetadata", () => {
                     canvas.width = video.videoWidth;
                     canvas.height = video.videoHeight;
                 });
-            
+
                 video.addEventListener("play", () => {
                     const drawFrame = () => {
                         context.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -46,14 +47,14 @@ export const ContactStart = () => {
             } else {
                 console.error("El elemento de video es nulo");
             }
-    
+
         } catch (error) {
             console.error("Error al abrir la cámara:", error);
             setIsCameraOpen(false);
         }
     };
-    
-    
+
+
 
 
 
@@ -76,8 +77,21 @@ export const ContactStart = () => {
             const arrayPrediction = response.predictions;
             const newDetections = [];
 
+            // Inicializa las mejores probabilidades para cada categoría
+            let bestPlasticoProbability = 0.93;
+            let bestCartonProbability = 0.93;
+            let bestNoReciclableProbability = 0.93;
+
+            // Inicializa las mejores detecciones para cada categoría
+            let bestPlasticoDetection = null;
+            let bestCartonDetection = null;
+            let bestNoReciclableDetection = null;
+
+            let bestDetection = null;
+            let bestProbability = 0.93;
+
             arrayPrediction.forEach((element) => {
-                if (element.probability >= 0.97) {
+                if (element.probability >= 0.93) {
                     const newDetection = {
                         color: "red",
                         left: element.boundingBox.left,
@@ -89,21 +103,53 @@ export const ContactStart = () => {
                     };
 
                     newDetections.push(newDetection);
+                    //bestDetection = newDetection;
+                    //bestProbability = element.probability;
                 }
 
-                if (element.tagName === 'Plastico' && element.probability > 0.98) {
-                    let newElement = { tipo: element.tagName }
-                    setcontAzul(prevAzul => [...prevAzul, newElement]);
+                if (element.tagName === 'Plastico' && element.probability >= bestPlasticoProbability) {
+                    bestPlasticoDetection = {
+                        tipo: element.tagName,
+                        probability: element.probability,
+                    };
+                    bestPlasticoProbability = element.probability;
                 }
 
+                if (element.tagName === 'Carton' && element.probability >= bestCartonProbability) {
+                    bestCartonDetection = {
+                        tipo: element.tagName,
+                        probability: element.probability,
+                    };
+                    bestCartonProbability = element.probability;
+                }
 
-                if (element.tagName === 'No reciclable' && element.probability > 0.97) {
-                    let newElement = { tipo: element.tagName }
-                    setcontVerde(prevVerde => [...prevVerde, newElement]);
+                if (element.tagName === 'No reciclable' && element.probability >= bestCartonProbability) {
+                    bestNoReciclableDetection = {
+                        tipo: element.tagName,
+                        probability: element.probability,
+                    };
+                    bestNoReciclableProbability = element.probability;
                 }
 
                 setDetections(newDetections);
             });
+
+            // Actualiza el estado con las mejores detecciones para cada categoría
+            if (bestPlasticoDetection) {
+                setcontAzul(prevAzul => [...prevAzul, { tipo: bestPlasticoDetection.tipo }]);
+            }
+            if (bestCartonDetection) {
+                setcontGris(prevGris => [...prevGris, { tipo: bestCartonDetection.tipo }]);
+            }
+            if (bestNoReciclableDetection) {
+                setcontVerde(prevVerde => [...prevVerde, { tipo: bestNoReciclableDetection.tipo }]);
+            }
+
+            
+            // if (bestDetection) {
+            //     setDetections([bestDetection]);
+            // }
+
             cleanupCamera();
         } catch (error) {
             console.error("Error al tomar la foto o procesarla:", error);
@@ -139,7 +185,7 @@ export const ContactStart = () => {
                         setcontAzul(prevAzul => [...prevAzul, newElement]);
                     }
 
-                    
+
 
                     if (element.tagName === 'No reciclable' && element.probability > 0.97) {
                         let newElement = { tipo: element.tagName }
@@ -158,7 +204,8 @@ export const ContactStart = () => {
         inputFile.current.value = "";
         setDetections([]);
         setcontAzul([]);
-        setcontVerde([]);        
+        setcontVerde([]);
+        setcontGris([]);
         cleanupCamera();
     };
 
@@ -181,7 +228,7 @@ export const ContactStart = () => {
             const context = canvas.getContext("2d");
             context.clearRect(0, 0, canvas.width, canvas.height);
         }
-        
+
     };
 
 
@@ -222,14 +269,11 @@ export const ContactStart = () => {
                                     </div>
                                 </div>
 
-                                {/* Agrega el canvas para mostrar la vista de la cámara */}
-                                
-                                    <div className="col-md-12">
-                                        <video ref={videoRef} autoPlay playsInline style={{ maxWidth: '100%' }}></video>
-                                        <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
-                                    </div>
-                                
-                               
+                                <div className="col-md-12">
+                                    <video ref={videoRef} autoPlay playsInline style={{ maxWidth: '100%' }}></video>
+                                    <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
+                                </div>
+
 
                                 <div className="col-12">
                                     <div className="position-relative mt-5">
@@ -270,6 +314,15 @@ export const ContactStart = () => {
                                             <div className="col-4" >
                                                 <img className="img-fluid" src={`img/contenedor-verde.jpg`} alt="" />
                                                 {contVerde.map((item, index) => (
+                                                    <p key={index} >{item.tipo}</p>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        {contGris.length > 0 && (
+                                            <div className="col-4" >
+                                                <img className="img-fluid" src={`img/contenedor-gris.jpg`} alt="" />
+                                                {contGris.map((item, index) => (
                                                     <p key={index} >{item.tipo}</p>
                                                 ))}
                                             </div>
