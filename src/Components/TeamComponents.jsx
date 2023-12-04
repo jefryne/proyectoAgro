@@ -9,7 +9,7 @@ export function TeamStart() {
                     </div>
                     <div id="s_integrates" className="row g-4">
                         <CardTeam name="Jeffry" img="img/team-1.jpg" skill="Desarrollador Full Stack" delay="0.1s"/>
-                        <CardTeam name="Julian" img="img/team-2.jpg" skill="Desarrollador Full Stack" delay="0.3s" github="https://github.com/Midnightgb"/>
+                        <CardTeam name="Julian" img="img/julian.jpeg" skill="Desarrollador Full Stack" delay="0.3s" github="https://github.com/Midnightgb"/>
                         <CardTeam name="Winder" img="img/team-3.jpg" skill="Desarrollador Full Stack" delay="0.5s"/>
                     </div>
                 </div>

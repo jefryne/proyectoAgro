@@ -37,7 +37,7 @@ export function About() {
                                 </div>
                                 <div className="col-sm-6">
                                     <img className="img-fluid mb-4" src="img/product.png"  />
-                                    <h5 className="mb-3">Organic Products</h5>
+                                    <h5 className="mb-3">Productos Organicos</h5>
                                     <span>Con dedicación y pasión por la tierra, cultivamos el futuro que alimenta al mundo.</span>
                                 </div>
                             </div>

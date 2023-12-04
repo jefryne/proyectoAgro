@@ -1,5 +1,4 @@
-const audioElement = new Audio();
-console.log("hola mundo desde voz.js");
+let audioElement = new Audio();
 const xiApiKey = '58d2540b63de9b7c439d0294b11a6412';
 
 if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
@@ -86,13 +85,13 @@ function hablar(texto_hablar) {
                             loadAudioBlob("BJZ01fC9ZCAOW8zSrpQA")
                             window.location.href = "#s_reciclaje";
                         } else if (element.text == "contacto") {
-                            loadAudioBlob("M4v3iXXPBiCwn6Uf5fmC")
+                            loadAudioBlob("../audio/yendo_analisis.mp3")
                             window.location.href = "#s_analisis";
                         } else if (element.text == "estadísticas ") {
-                            loadAudioBlob("ZHinbkFkL4JUQY4LGB6X")
+                            loadAudioBlob("../audio/yendo_estadisticas.mp3")
                             window.location.href = "#s_estadisticas";
                         } else if (element.text == "pie") {
-                            loadAudioBlob("yendo a pie de pagina")
+                            
                             window.location.href = "#s_pie";
                         } else if (element.text == "experiencia") {
                             loadAudioBlob("wtDHPGw4LK1aWI7qOSml")
@@ -105,7 +104,7 @@ function hablar(texto_hablar) {
                             loadAudioBlob("ITY9pOYokj19Fzwuqzf7")
                             window.location.href = "#s_formulario";
                         } else if (element.text == "integrantes") {
-                            loadAudioBlob("6xENwY3rXho00YgGerZ0")
+                            loadAudioBlob("../audio/yendo_analisis.mp3")
                             window.location.href = "http://localhost:5173/team";
                         }else if (element.text == "clasificación") {
                            ////////////// texto de la cosas que se clasifican
@@ -115,12 +114,12 @@ function hablar(texto_hablar) {
                 } else if (data.result.prediction.topIntent == "Presentarse") {
                     if (element.category == "CosaPresentar") {
                         if (element.text == "aplicación") {
-                            loadAudioBlob("PG2zpsP5K9JkifjsvKAM", "aplicacion")
+                            loadAudioBlob("../audio/aplicacion.mp3", "aplicacion")
                         } else if (element.text == "integrantes") {
-                            loadAudioBlob("M4db6HAoCjH1NlKo4oqb")
+                            loadAudioBlob("../audio/integrantes.mp3")
                             window.location.href = "#s_integrates";
                         } else if (element.text == "funcionalidad") {
-                            loadAudioBlob("sTab5LS4slqmkDNOnKSq")
+                            loadAudioBlob("../audio/kira.mp3")
                         }
                     }
                 }
@@ -143,64 +142,27 @@ function redirigirUnaVez() {
 
     redirigir(0);
 }
+let audioSilenced = true;
 
-
-
-function loadAndPlayAudio(id_historial, intecion = "ninguna") {
-    fetch(`https://api.elevenlabs.io/v1/history/${id_historial}/audio`, {
-            method: 'GET',
-            headers: {
-                "accept": "audio/mpeg",
-                "xi-api-key": xiApiKey
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                console.log("Error en la solicitud");
-            }
-            return response.blob();
-        })
-        .then(audioBlob => {
-            console.log(audioBlob);
-            const audioUrl = URL.createObjectURL(audioBlob);
-            audioElement.src = audioUrl;
-            audioElement.play(); // Reproducir el audio cuando esté listo
-            if (intecion == "aplicacion") {
-                redirigirUnaVez()
-            }
-        })
-        .catch(error => {
-            console.error('Error en la solicitud:', error);
-        });
-}
-
-// loadAudioBlob("M4db6HAoCjH1NlKo4oqb", "aplicacion")
+//loadAudioBlob("../audio/aplicacion.mp3");
 //linea para cambiar colores del blob 14938
 let audio = document.getElementById("voiceBlob");
 audio.style.visibility = "hidden";
 
 let wave = new CircularAudioWave(document.getElementById('chart-container'));
-function loadAudioBlob(endpoint, intecion) {
-    fetch(`https://api.elevenlabs.io/v1/history/${endpoint}/audio`, {
-        "headers": {
-        "accept": "audio/mpeg",
-        "xi-api-key": xiApiKey
-        }   
-    }).then(response => {
-        console.log(response);
-        return response.blob();
-    }).then(audioBlob => {
+function loadAudioBlob(audioPath, intecion) {
+    fetch(audioPath)
+    .then(response => response.blob()).then(audioBlob => {
         audio.style.visibility = "visible";
         wave = new CircularAudioWave(document.getElementById('chart-container'));
         const audioUrl = URL.createObjectURL(audioBlob);
         audioElement.src = audioUrl;
-        
         audioElement.addEventListener('loadedmetadata', () => {
             const DURATION = audioElement.duration;
             const MS = DURATION * 1070;
             console.log('Duracion en ms:', MS);
             console.log('Duración del audio:', DURATION);
-            setTimeout(function() {
+            setTimeout(function () {
                 console.log('Audio terminado');
                 wave.destroy();
                 audio.style.visibility = "hidden";
@@ -217,4 +179,19 @@ function loadAudioBlob(endpoint, intecion) {
     }).catch(error => {
         console.error('Error en la solicitud:', error);
     });
+}
+
+document.getElementById('audioToggle').addEventListener('click', toggleAudio);
+let imgAudio = document.getElementById("imgAudio");
+
+function toggleAudio() {
+    if (audioSilenced) {
+        console.log("quitar silencio");
+        audioSilenced = false;
+        imgAudio.src = "/img/icons8-audio-50.png";
+        setTimeout(function () {
+            document.getElementById("audioToggle").style.visibility = "hidden";
+        }, 1000);
+    }
+
 }

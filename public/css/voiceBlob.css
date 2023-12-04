@@ -3,3 +3,28 @@
     z-index: 100;
     transform: translate(40vw, 86vh);
 }
+
+div#audioToggle {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    width: 40px;
+    height: 40px;
+    background-color: #dddddd;
+    border-radius: 50%;
+    z-index: 10000;
+    transition: all 0.3s ease;
+}
+
+div#audioToggle img {
+    position: absolute;
+    top: 7px;
+    left: 7px;
+    border-radius: 50%;
+    z-index: 10000;
+}
+
+div#audioToggle:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+}
