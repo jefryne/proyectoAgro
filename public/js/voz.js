@@ -85,13 +85,13 @@ function hablar(texto_hablar) {
                             loadAudioBlob("BJZ01fC9ZCAOW8zSrpQA")
                             window.location.href = "#s_reciclaje";
                         } else if (element.text == "contacto") {
-                            loadAudioBlob("M4v3iXXPBiCwn6Uf5fmC")
+                            loadAudioBlob("../audio/yendo_analisis.mp3")
                             window.location.href = "#s_analisis";
                         } else if (element.text == "estadísticas ") {
-                            loadAudioBlob("ZHinbkFkL4JUQY4LGB6X")
+                            loadAudioBlob("../audio/yendo_estadisticas.mp3")
                             window.location.href = "#s_estadisticas";
                         } else if (element.text == "pie") {
-                            loadAudioBlob("yendo a pie de pagina")
+                            
                             window.location.href = "#s_pie";
                         } else if (element.text == "experiencia") {
                             loadAudioBlob("wtDHPGw4LK1aWI7qOSml")
@@ -104,7 +104,7 @@ function hablar(texto_hablar) {
                             loadAudioBlob("ITY9pOYokj19Fzwuqzf7")
                             window.location.href = "#s_formulario";
                         } else if (element.text == "integrantes") {
-                            loadAudioBlob("6xENwY3rXho00YgGerZ0")
+                            loadAudioBlob("../audio/yendo_analisis.mp3")
                             window.location.href = "http://localhost:5173/team";
                         }else if (element.text == "clasificación") {
                            ////////////// texto de la cosas que se clasifican
@@ -114,12 +114,12 @@ function hablar(texto_hablar) {
                 } else if (data.result.prediction.topIntent == "Presentarse") {
                     if (element.category == "CosaPresentar") {
                         if (element.text == "aplicación") {
-                            loadAudioBlob("PG2zpsP5K9JkifjsvKAM", "aplicacion")
+                            loadAudioBlob("../audio/aplicacion.mp3", "aplicacion")
                         } else if (element.text == "integrantes") {
-                            loadAudioBlob("M4db6HAoCjH1NlKo4oqb")
+                            loadAudioBlob("../audio/integrantes.mp3")
                             window.location.href = "#s_integrates";
                         } else if (element.text == "funcionalidad") {
-                            loadAudioBlob("sTab5LS4slqmkDNOnKSq")
+                            loadAudioBlob("../audio/kira.mp3")
                         }
                     }
                 }
@@ -144,22 +144,15 @@ function redirigirUnaVez() {
 }
 let audioSilenced = true;
 
-// loadAudioBlob("M4db6HAoCjH1NlKo4oqb", "aplicacion")
+//loadAudioBlob("../audio/aplicacion.mp3");
 //linea para cambiar colores del blob 14938
 let audio = document.getElementById("voiceBlob");
 audio.style.visibility = "hidden";
 
 let wave = new CircularAudioWave(document.getElementById('chart-container'));
-function loadAudioBlob(endpoint, intecion) {
-    fetch(`https://api.elevenlabs.io/v1/history/${endpoint}/audio`, {
-        "headers": {
-            "accept": "audio/mpeg",
-            "xi-api-key": xiApiKey
-        }
-    }).then(response => {
-        console.log(response);
-        return response.blob();
-    }).then(audioBlob => {
+function loadAudioBlob(audioPath, intecion) {
+    fetch(audioPath)
+    .then(response => response.blob()).then(audioBlob => {
         audio.style.visibility = "visible";
         wave = new CircularAudioWave(document.getElementById('chart-container'));
         const audioUrl = URL.createObjectURL(audioBlob);
