@@ -78,9 +78,9 @@ export const ContactStart = () => {
             const newDetections = [];
 
             // Inicializa las mejores probabilidades para cada categoría
-            let bestPlasticoProbability = 0.93;
-            let bestCartonProbability = 0.93;
-            let bestNoReciclableProbability = 0.93;
+            let bestPlasticoProbability = 0.98;
+            let bestCartonProbability = 0.97;
+            let bestNoReciclableProbability = 0.95;
 
             // Inicializa las mejores detecciones para cada categoría
             let bestPlasticoDetection = null;
@@ -91,7 +91,7 @@ export const ContactStart = () => {
             let bestProbability = 0.93;
 
             arrayPrediction.forEach((element) => {
-                if (element.probability >= 0.93) {
+                if (element.probability >= 0.96) {
                     const newDetection = {
                         color: "red",
                         left: element.boundingBox.left,
@@ -123,7 +123,7 @@ export const ContactStart = () => {
                     bestCartonProbability = element.probability;
                 }
 
-                if (element.tagName === 'No reciclable' && element.probability >= bestCartonProbability) {
+                if (element.tagName === 'No reciclable' && element.probability >= bestNoReciclableProbability) {
                     bestNoReciclableDetection = {
                         tipo: element.tagName,
                         probability: element.probability,

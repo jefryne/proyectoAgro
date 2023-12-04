@@ -8,9 +8,9 @@ export function TeamStart() {
                         <h1 className="mb-5">Miembros con Experiencia</h1>
                     </div>
                     <div id="s_integrates" className="row g-4">
-                        <CardTeam name="Jeffry" img="img/team-1.jpg" skill="Desarrollador Full Stack" delay="0.1s"/>
+                        <CardTeam name="Jeffry" img="img/jeffry.png" skill="Desarrollador Full Stack" delay="0.1s" github="https://github.com/jefryne" />
                         <CardTeam name="Julian" img="img/julian.jpeg" skill="Desarrollador Full Stack" delay="0.3s" github="https://github.com/Midnightgb"/>
-                        <CardTeam name="Winder" img="img/team-3.jpg" skill="Desarrollador Full Stack" delay="0.5s"/>
+                        <CardTeam name="Winder" img="img/winder.jpg" skill="Desarrollador Full Stack" delay="0.5s" github="https://github.com/roman09ws" />
                     </div>
                 </div>
             </div>
@@ -23,7 +23,7 @@ export function CardTeam(props) {
         <>
             <div className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay={props.delay}>
                 <div className="team-item rounded p-4">
-                    <img className="img-fluid rounded mb-4" src={props.img}  />
+                    <img className="img-fluid rounded mb-4" src={props.img} />
                     <h5>{props.name}</h5>
                     <p className="text-primary">{props.skill}</p>
                     <div className="d-flex justify-content-center">
