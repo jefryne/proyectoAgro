@@ -9,13 +9,32 @@ export function TechnologiesComponents() {
                     <div className="container text-center">
                         <div className="row justify-content-center">
                             <div className="col-lg-6">
-                                
                                 <h1 className="display-1">Tecnologias</h1>
-                                <h1 className="mb-4">Page Not Found</h1>
-                                <p className="mb-4">We’re sorry, the page you have looked for does not exist in our website! Maybe go to our home page or try to use a search?</p>
-                                
+                                <h1 className="mb-4">Que usamos</h1>
                             </div>
                         </div>
+                        <div className="row justify-contend-center">
+                                <div className="col-lg-4 wow fadeInUp" data-wow-delay="0.2s">
+                                    <img src="img/html.png" className="img-fluid" alt="html" />
+                                </div>
+                                <div className="col-lg-4 wow fadeInUp" data-wow-delay="0.3s">
+                                    <img src="img/css.png" className="img-fluid" alt="css" />
+                                </div>
+                                <div className="col-lg-4 wow fadeInUp" data-wow-delay="0.5s">
+                                    <img src="img/bootstrap.png" className="img-fluid" alt="bootstrap" />
+                                </div>
+                        </div>                                
+                        <div className="row justify-contend-center">
+                                <div className="col-lg-4 wow fadeInUp" data-wow-delay="0.2s">
+                                    <img src="img/js.png" className="img-fluid" alt="js" />
+                                </div>
+                                <div className="col-lg-4 wow fadeInUp" data-wow-delay="0.3s">
+                                    <img src="img/react.jpg" className="img-fluid" alt="react" />
+                                </div>
+                                <div className="col-lg-4 wow fadeInUp" data-wow-delay="0.5s">
+                                    <img src="img/azure-2.jpeg" className="img-fluid" alt="azure" />
+                                </div>
+                        </div>                                
                     </div>
                 </div>
             </div>
