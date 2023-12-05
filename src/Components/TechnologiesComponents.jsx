@@ -14,26 +14,31 @@ export function TechnologiesComponents() {
                             </div>
                         </div>
                         <div className="row justify-contend-center">
-                                <div className="col-lg-4 wow fadeInUp" data-wow-delay="0.2s">
-                                    <img src="img/html.png" className="img-fluid" alt="html" />
-                                </div>
-                                <div className="col-lg-4 wow fadeInUp" data-wow-delay="0.3s">
-                                    <img src="img/css.png" className="img-fluid" alt="css" />
-                                </div>
-                                <div className="col-lg-4 wow fadeInUp" data-wow-delay="0.5s">
-                                    <img src="img/bootstrap.png" className="img-fluid" alt="bootstrap" />
-                                </div>
+                            <div className="col-lg-4 wow fadeInUp" data-wow-delay="0.2s">
+                                <img src="img/html.png" className="img-fluid" alt="html" />
+                            </div>
+                            <div className="col-lg-4 wow fadeInUp" data-wow-delay="0.3s">
+                                <img src="img/css.png" className="img-fluid" alt="css" />
+                            </div>
+                            <div className="col-lg-4 wow fadeInUp" data-wow-delay="0.5s">
+                                <img src="img/bootstrap.png" className="img-fluid" alt="bootstrap" />
+                            </div>
                         </div>                                
                         <div className="row justify-contend-center">
-                                <div className="col-lg-4 wow fadeInUp" data-wow-delay="0.2s">
-                                    <img src="img/js.png" className="img-fluid" alt="js" />
-                                </div>
-                                <div className="col-lg-4 wow fadeInUp" data-wow-delay="0.3s">
-                                    <img src="img/react.jpg" className="img-fluid" alt="react" />
-                                </div>
-                                <div className="col-lg-4 wow fadeInUp" data-wow-delay="0.5s">
-                                    <img src="img/azure-2.jpeg" className="img-fluid" alt="azure" />
-                                </div>
+                            <div className="col-lg-4 wow fadeInUp" data-wow-delay="0.2s">
+                                <img src="img/js.png" className="img-fluid" alt="js" />
+                            </div>
+                            <div className="col-lg-4 wow fadeInUp" data-wow-delay="0.3s">
+                                <img src="img/react.jpg" className="img-fluid" alt="react" />
+                            </div>
+                            <div className="col-lg-4 wow fadeInUp" data-wow-delay="0.5s">
+                                <img src="img/azure-2.jpeg" className="img-fluid" alt="azure" />
+                            </div>
+                        </div>
+                        <div className="row justify-contend-center mt-5">
+                            <div className="col-lg-12 wow fadeinUp" data-wow-delay="2s">
+                                <img src="img/elevenlabs.png" className="img-fluid" alt="elevenlabs" />
+                            </div>
                         </div>                                
                     </div>
                 </div>
