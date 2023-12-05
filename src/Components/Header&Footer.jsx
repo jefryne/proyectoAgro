@@ -18,6 +18,10 @@ const link = [
         name: "clasificacion",
         href: "/classification",
     },
+    {
+        name: "Technology",
+        href: "/technology",
+    },
 ];
 export function Nav() {
     return (

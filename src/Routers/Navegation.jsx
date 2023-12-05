@@ -4,6 +4,7 @@ import Contact from "../Pages/Contact";
 import { Team } from "../Pages/Team";
 import { Nav } from "../Components/Header&Footer";
 import Classification from "../Pages/Classification";
+import { Technology } from "../Pages/Technology";
 export default function Navegation() {
   return (
     <>
@@ -14,6 +15,7 @@ export default function Navegation() {
             <Route exact path="/contact" element={<Contact/>} />
             <Route exact path="/team" element={<Team/>} />
             <Route exact path="/classification" element={<Classification/>} />
+            <Route exact path="/technology" element={<Technology/>} />
         </Routes>
       </Routers>
     </>
